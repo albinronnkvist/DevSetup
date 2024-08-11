@@ -14,7 +14,7 @@ cat <<EOL > ~/.gitconfig
 EOL
 
 # Configure aliases in ~/.gitconfig
-cat <<'EOL' > ~/.gitconfig
+cat <<'EOL' >> ~/.gitconfig
 [alias]
 	i = "init"                              # Initialize a new Git repository
 	l = "log --oneline --graph --decorate --all" # Show a decorated one-line graphical log of all branches
