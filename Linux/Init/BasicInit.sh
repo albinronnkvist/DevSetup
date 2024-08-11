@@ -6,10 +6,10 @@ read -r EMAIL
 
 export EMAIL
 
-bash ./Basics/Aliases/Setup.sh
-bash ./Basics/Git/Setup.sh
-bash ./Basics/Docker/Setup.sh
-bash ./Basics/Codium/Setup.sh
-bash ./Basics/DevFolder/Setup.sh
+bash ./Aliases/Setup.sh
+bash ./Git/Setup.sh
+bash ./Docker/Setup.sh
+bash ./CodeEditors/Codium/Setup.sh
+bash ./DevFolder/Setup.sh
 
 echo "All tasks completed successfully. Please restart your terminal or run 'source ~/.bashrc' to apply changes."

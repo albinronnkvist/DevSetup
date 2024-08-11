@@ -1,6 +1,9 @@
 #!/bin/bash
 
+SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+
 echo -e "\nSetting up Docker..."
-bash ./SubTasks/InstallDocker.sh
-bash ./SubTasks/RunDockerAsNonRoot.sh
-bash ./SubTasks/EnableAndTestDocker.sh
+
+bash $SCRIPT_DIR/SubTasks/InstallDocker.sh
+bash $SCRIPT_DIR/SubTasks/RunDockerAsNonRoot.sh
+bash $SCRIPT_DIR/SubTasks/EnableAndTestDocker.sh

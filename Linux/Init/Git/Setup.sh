@@ -1,7 +1,10 @@
 #!/bin/bash
 
+SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+
 echo -e "\nSetting up Git..."
-bash ./SubTasks/InstallGit.sh
-bash ./SubTasks/AliasGForGit.sh
-bash ./SubTasks/ConfigureGitConfig.sh
-bash ./SubTasks/ConnectToGitHub.sh
+
+bash $SCRIPT_DIR/SubTasks/InstallGit.sh
+bash $SCRIPT_DIR/SubTasks/AliasGForGit.sh
+bash $SCRIPT_DIR/SubTasks/ConfigureGitConfig.sh
+bash $SCRIPT_DIR/SubTasks/ConnectToGitHub.sh

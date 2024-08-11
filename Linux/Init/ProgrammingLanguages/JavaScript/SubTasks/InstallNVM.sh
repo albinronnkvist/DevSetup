@@ -1,7 +1,9 @@
 #!/bin/bash
 
+SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+
 # Install Curl
-bash ../../Other/InstallCurl.sh
+bash $SCRIPT_DIR/../../../Other/InstallCurl.sh
 
 # Default NVM version if not specified
 DEFAULT_NVM_VERSION="v0.39.1"
