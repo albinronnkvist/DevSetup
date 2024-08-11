@@ -12,3 +12,9 @@ Scripts to automatically setup dev env.
     ```bash
     ./<scriptname>.sh
     ```
+
+## TODO
+
+- Add PostgreSQL
+- Add Minikube
+- GIF recorder
