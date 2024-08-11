@@ -11,8 +11,8 @@ for extension in pkief.material-icon-theme christian-kohler.path-intellisense wa
 done
 
 # Install the Codeium addon for VS Codium if not already installed
-if ! codium --list-extensions | grep -q "Exafunction.codeium"; then
-    codium --install-extension Exafunction.codeium
+if ! codium --list-extensions | grep -q "Codeium.codeium"; then
+    codium --install-extension Codeium.codeium
     echo "Codeium addon installed for VS Codium"
 else
     echo "Codeium addon is already installed for VS Codium"
