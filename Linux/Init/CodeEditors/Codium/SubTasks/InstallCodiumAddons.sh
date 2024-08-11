@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Install the specified VS Codium addons if not already installed
-for extension in pkief.material-icon-theme christian-kohler.path-intellisense wayou.vscode-todo-highlight codezombiech.gitignore esbenp.prettier-vscode ms-azuretools.vscode-docker; do
+for extension in pkief.material-icon-theme christian-kohler.path-intellisense wayou.vscode-todo-highlight codezombiech.gitignore esbenp.prettier-vscode ms-azuretools.vscode-docker Postman.postman-for-vscode; do
     if ! codium --list-extensions | grep -q "$extension"; then
         codium --install-extension "$extension"
         echo "Installed $extension"
