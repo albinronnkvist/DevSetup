@@ -1,14 +1,11 @@
 #!/bin/bash
 
-# NB! Ensure that you have the Windows 11 ISO file downloaded and accessible in the correct folder (see ISO_PATH further down)
+# Ensure that you have the Windows 11 ISO file downloaded and accessible in the correct folder (see ISO_PATH further down)
 # Download: https://www.microsoft.com/software-download/windows11
 # Minimum requirements: https://www.microsoft.com/en-us/windows/windows-11-specifications
 
-# (Optional) Setup without Microsoft account
-# 1. Disable network in VM
-# 2. When you get to the "Let's add your Microsoft account" section, press Shift + F10 to open up a Command Prompt Window and type: oobe\bypassnro
-# 3. Go through the process again and this time you will be able to create a local account.
-# 4. Enable network in VM
+# Ensure that you have VBox GuestAdditions ISO file downloaded and accessible in the correct folder (see GUEST_ADDITIONS_PATH further down)
+# Download: https://www.oracle.com/virtualization/technologies/vm/downloads/virtualbox-downloads.html
 
 check_success() {
     if [ $? -ne 0 ]; then
@@ -27,6 +24,7 @@ check_success "VirtualBox installation"
 
 VM_NAME="Windows11"
 ISO_PATH="$HOME/Documents/VM/Windows11.iso"
+GUEST_ADDITIONS_PATH="$HOME/Documents/VM/VBoxGuestAdditions.iso"
 VBOX_DISK_PATH="$HOME/Documents/VM/$VM_NAME/$VM_NAME.vdi"
 DISK_SIZE="65000"  # (65GB)
 RAM_SIZE="4096"  # (4GB)
@@ -42,6 +40,7 @@ fi
 
 echo "Configuring VM settings..."
 vboxmanage modifyvm "$VM_NAME" --memory "$RAM_SIZE" --vram "$VRAM_SIZE" --cpus 2 --ioapic on --graphicscontroller vboxsvga --accelerate3d on --boot1 dvd --nic1 nat
+vboxmanage setextradata "$VM_NAME" "CustomVideoMode1" "1920x1080x32"
 check_success "VM configuration"
 
 if [ -f "$VBOX_DISK_PATH" ]; then
@@ -66,27 +65,47 @@ if ! vboxmanage showvminfo "$VM_NAME" | grep -q "$ISO_PATH"; then
     echo "Attaching Windows 11 ISO to VM..."
     vboxmanage storagectl "$VM_NAME" --name "IDE Controller" --add ide
     vboxmanage storageattach "$VM_NAME" --storagectl "IDE Controller" --port 0 --device 0 --type dvddrive --medium "$ISO_PATH"
+    vboxmanage storageattach "$VM_NAME" --storagectl "IDE Controller" --port 1 --device 0 --type dvddrive --medium "$GUEST_ADDITIONS_PATH"
     check_success "Attach ISO"
 else
     echo "Windows 11 ISO is already attached."
 fi
 
-# Uncomment the lines below if you want to enable RDP access
-# if ! vboxmanage showvminfo "$VM_NAME" | grep -q "VRDE: enabled"; then
-#     echo "Setting up RDP access to VM..."
-#     vboxmanage modifyvm "$VM_NAME" --vrde on
-#     check_success "RDP setup"
-# else
-#     echo "RDP access is already enabled."
-# fi
+echo "Disabling the network interface in the VM temporarily to be able to setup local windows user..."
+vboxmanage modifyvm "$VM_NAME" --nic1 none
+check_success "Disable network interface"
 
-# Start the VM
-echo "Starting the VM..."
-vboxmanage startvm "$VM_NAME" --type headless
+echo "Starting VM..."
+vboxmanage startvm "$VM_NAME" --type gui
 check_success "Starting VM"
 
-echo "Windows 11 VM setup complete. You can now proceed with the Windows 11 installation inside VirtualBox."
+# Manual intervention
+echo
+echo "#### WINDOWS MANUAL SETUP ####"
+echo "Manual steps to complete the setup in the Windows VM (press 'right-Ctrl + C' to exit the VM window if you're stuck in fullscreen):"
+echo "1. Wait for the VM window to open and press any key when prompted to boot from media."
+echo "2. Go through the manual Windows setup:"
+echo "  - Select the 'I don't have internet' and 'Continue with limited setup' options to use a local account instead of a Microsoft account."
+echo "3. Install VBoxWindowsAdditions:"
+echo "  - Open a new Powershell terminal as admin."
+echo "  - Enter this one-liner (the file path may be different): "
+echo "    Start-Process -FilePath "E:\VBoxWindowsAdditions.exe" -ArgumentList "/S" -NoNewWindow -Wait"
+echo "  - Wait for it to complete."
+echo
+read -p "Press Enter to continue once the setup is complete..."
 
-sleep 3
+echo "Stopping VM..."
+vboxmanage controlvm "$VM_NAME" poweroff
+check_success "Stopping VM"
 
-virtualbox &
+echo "Re-enabling the network interface in the VM..."
+sleep 5
+vboxmanage modifyvm "$VM_NAME" --nic1 nat
+check_success "Enable network interface"
+
+echo "Starting VM..."
+vboxmanage startvm "$VM_NAME" --type gui
+check_success "Starting VM"
+
+echo "Windows 11 VM setup complete."
+echo "Adjust resolution if needed in Windows settings and/or VirtualBox settings."
