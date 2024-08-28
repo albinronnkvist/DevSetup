@@ -35,7 +35,7 @@ else
 fi
 
 echo "Configuring VM settings..."
-vboxmanage modifyvm "$VM_NAME" --memory "$RAM_SIZE" --vram "$VRAM_SIZE" --cpus 2 --ioapic on --accelerate3d on --boot1 dvd --nic1 nat
+vboxmanage modifyvm "$VM_NAME" --memory "$RAM_SIZE" --vram "$VRAM_SIZE" --cpus 2 --ioapic on --graphicscontroller vboxsvga --accelerate3d on --boot1 dvd --nic1 nat
 check_success "VM configuration"
 
 if [ -f "$VBOX_DISK_PATH" ]; then
