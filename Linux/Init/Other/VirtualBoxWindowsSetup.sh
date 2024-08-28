@@ -4,6 +4,12 @@
 # Download: https://www.microsoft.com/software-download/windows11
 # Minimum requirements: https://www.microsoft.com/en-us/windows/windows-11-specifications
 
+# (Optional) Setup without Microsoft account
+# 1. Disable network in VM
+# 2. When you get to the "Let's add your Microsoft account" section, press Shift + F10 to open up a Command Prompt Window and type: oobe\bypassnro
+# 3. Go through the process again and this time you will be able to create a local account.
+# 4. Enable network in VM
+
 check_success() {
     if [ $? -ne 0 ]; then
         echo "Error: $1 failed. Exiting."
