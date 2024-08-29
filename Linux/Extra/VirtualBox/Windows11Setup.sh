@@ -14,6 +14,9 @@ check_success() {
     fi
 }
 
+SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+bash $SCRIPT_DIR/InstallVirtualBox.sh
+
 VM_NAME="Windows11"
 ISO_PATH="$HOME/Documents/VM/Windows11.iso"
 GUEST_ADDITIONS_PATH="$HOME/Documents/VM/VBoxGuestAdditions.iso"
