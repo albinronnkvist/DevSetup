@@ -14,14 +14,6 @@ check_success() {
     fi
 }
 
-echo "Updating system and installing dependencies..."
-sudo apt update && sudo apt upgrade -y
-check_success "System update"
-
-echo "Installing VirtualBox..."
-sudo apt install -y virtualbox
-check_success "VirtualBox installation"
-
 VM_NAME="Windows11"
 ISO_PATH="$HOME/Documents/VM/Windows11.iso"
 GUEST_ADDITIONS_PATH="$HOME/Documents/VM/VBoxGuestAdditions.iso"
