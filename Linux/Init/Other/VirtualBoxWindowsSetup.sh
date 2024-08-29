@@ -89,7 +89,7 @@ echo "  - Select the 'I don't have internet' and 'Continue with limited setup' o
 echo "3. Install VBoxWindowsAdditions:"
 echo "  - Open a new Powershell terminal as admin."
 echo "  - Enter this one-liner (the file path may be different): "
-echo "    Start-Process -FilePath "E:\VBoxWindowsAdditions.exe" -ArgumentList "/S" -NoNewWindow -Wait"
+echo "    Start-Process -FilePath 'E:\VBoxWindowsAdditions.exe' -ArgumentList '/S' -NoNewWindow -Wait"
 echo "  - Wait for it to complete."
 echo
 read -p "Press Enter to continue once the setup is complete..."
