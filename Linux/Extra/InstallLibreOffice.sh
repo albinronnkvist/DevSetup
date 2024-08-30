@@ -7,10 +7,10 @@ check_success() {
     fi
 }
 
-echo "Updating system and installing dependencies..."
-sudo apt update && sudo apt upgrade -y
-check_success "System update"
-
-echo "Installing LibreOffice..."
-sudo apt install -y libreoffice
-check_success "LibreOffice installation"
+if ! command -v libreoffice &> /dev/null; then
+    echo "Installing LibreOffice..."
+    sudo apt update && sudo apt install -y libreoffice
+    check_success "LibreOffice installation"
+else
+    echo "LibreOffice is already installed"
+fi
