@@ -9,10 +9,6 @@ check_success() {
     fi
 }
 
-echo "Updating Ubuntu packages..."
-sudo apt update && sudo apt upgrade -y
-check_success "System update"
-
 echo "Installing ClamAV and ClamAV Daemon..."
 sudo apt install -y clamav clamav-daemon
 check_success "ClamAV installation"
