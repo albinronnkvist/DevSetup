@@ -15,12 +15,10 @@ SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 bash $SCRIPT_DIR/InstallVirtualBox.sh
 bash $SCRIPT_DIR/InstallGenIsoImage.sh
 
-# User input
-read -s -p "Enter your email: " EMAIL
+# VM user setup
 echo
-
-read -s -p "Enter the username for the new VM user: " USER_NAME
-echo
+echo "#### MANUAL STEPS 1/3 - VM user Setup ####"
+read -p "Enter the username for the new VM user: " USER_NAME
 
 read -s -p "Enter the password for the new VM user: " USER_PASSWORD
 echo
@@ -173,10 +171,10 @@ check_success "Starting VM"
 
 # Manual prompts (could automate this, view: https://canonical-subiquity.readthedocs-hosted.com/en/latest/explanation/zero-touch-autoinstall.html)
 echo
-echo "#### MANUAL STEPS ####"
+echo "#### MANUAL STEPS 2/3 - Ubuntu Setup ####"
 echo "Manual steps to complete the setup in the VM:"
 echo "1. When prompted with 'Continue with autoinstall? (yes|no)': Enter 'yes' and wait for the installation to complete."
-echo "2. When with 'ubuntu-server lgin': Enter the username and password that you set in the previous steps."
+echo "2. When prompted with 'ubuntu-server login': Enter the username and password that you set in the previous steps."
 echo
 read -p "Press Enter to continue once the setup is complete..."
 
@@ -185,24 +183,50 @@ vboxmanage controlvm "$VM_NAME" poweroff
 check_success "Stopping VM"
 
 echo "Starting VM in headless mode..."
+sleep 5
 vboxmanage startvm "$VM_NAME" --type headless
 check_success "Starting VM"
 
-sleep 5
+echo
+echo "#### MANUAL STEPS 3/3 - SSH Setup ####"
+read -p "Enter your SSH email: " EMAIL
+echo
 
-# SSH into the VM
-echo "Connecting to the VM via SSH..."
-ssh -p $SSH_PORT $USER_NAME@localhost
+# Generate & Add SSH keys to server
+echo "Generating SSH key..."
+ssh-keygen -t rsa -b 4096 -C "$EMAIL" -f "$HOME/.ssh/id_rsa_$VM_NAME" -N ""
+check_success "SSH key generation"
 
-# TODO:
-# - Generate & Add SSH keys to server
-#   - ssh-keygen -t rsa -b 4096 -C "$EMAIL"
-#   - ssh-copy-id $USER_NAME@localhost
-# - Login
-#   - ssh -p $SSH_PORT $USER_NAME@localhost
-# - Configure SSH Server (no password auth, no root access, etc.)
-#   - exit
-# - Configure SSH Client
-#   - 
-# - Login with alias
-#   - ssh UbuntuServerVM
+# Remove old host key to prevent issues with changed keys
+echo "Checking for existing host key..."
+ssh-keygen -R "[localhost]:$SSH_PORT" >/dev/null 2>&1
+check_success "Removing old host key (if any)"
+
+echo "Adding SSH key to the server..."
+ssh-copy-id -i "$HOME/.ssh/id_rsa_$VM_NAME" -p $SSH_PORT "$USER_NAME@localhost"
+check_success "SSH key addition"
+
+# Configure SSH client
+echo "Configuring SSH client..."
+SSH_CONFIG="$HOME/.ssh/config"
+{
+    echo "Host $VM_NAME"
+    echo "  HostName localhost"
+    echo "  User $USER_NAME"
+    echo "  Port $SSH_PORT"
+    echo "  IdentityFile ~/.ssh/id_rsa_$VM_NAME"
+} >> "$SSH_CONFIG"
+check_success "SSH client configuration"
+
+# Login with alias
+echo "Setup complete! You can now login to the VM using the alias:"
+echo "ssh $VM_NAME"
+
+# Optional
+echo
+echo "#### (Optional) - Secure SSH Server Setup ####"
+echo "Run these commands to improve the security of the SSH server:"
+echo "1. Open config: 'sudo nano /etc/ssh/sshd_config'"
+echo "2. Disable root login in the file: 'PermitRootLogin no'"
+echo "3. Disable password authentication in the file: 'PasswordAuthentication no'"
+echo "4. Restart SSH server: 'sudo systemctl restart ssh'"
