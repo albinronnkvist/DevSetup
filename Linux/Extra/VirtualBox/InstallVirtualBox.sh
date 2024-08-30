@@ -14,10 +14,6 @@ if ! command -v virtualbox &> /dev/null; then
     sudo apt update
     check_success "System update"
 
-    echo "Upgrading system..."
-    sudo apt upgrade -y
-    check_success "System upgrade"
-
     echo "Installing VirtualBox..."
     sudo apt install -y virtualbox
     check_success "VirtualBox installation"
