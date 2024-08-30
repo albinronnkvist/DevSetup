@@ -1,7 +1,7 @@
 #!/bin/bash
 
 BASHRC_FILE=~/.bashrc
-ALIAS_COMMAND="alias update='sudo apt-get update && sudo apt-get upgrade && sudo apt-get dist-upgrade'"
+ALIAS_COMMAND="alias update='sudo apt update && sudo apt upgrade && sudo apt dist-upgrade'"
 
 if ! grep -Fxq "$ALIAS_COMMAND" "$BASHRC_FILE"; then
     if [ -n "$(tail -c1 "$BASHRC_FILE")" ]; then
