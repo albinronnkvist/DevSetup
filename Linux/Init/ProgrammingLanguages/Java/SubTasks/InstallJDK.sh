@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DEFAULT_JDK_VERSION="17"
+DEFAULT_JDK_VERSION="21"
 JDK_VERSION=${1:-$DEFAULT_JDK_VERSION}
 
 install_jdk() {
