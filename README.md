@@ -17,4 +17,3 @@ Scripts to automatically setup dev env.
 
 - Add PostgreSQL
 - Add Minikube
-- GIF recorder
