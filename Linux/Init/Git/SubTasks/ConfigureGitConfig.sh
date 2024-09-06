@@ -58,13 +58,15 @@ cat <<'EOL' >> ~/.gitconfig
 	rba = "rebase --abort"                  # Abort the rebase process and return to the original branch
 	rbi = "!f() { git rebase -i HEAD~$1; }; f" # Start an interactive rebase for the last specified number of commits
 	new-pr = "!f() { \
-        branch_name=\"$1\"; \
-        git checkout main && \
-        git pull && \
-        git checkout -b \"$branch_name\" && \
-        git push -u origin \"$branch_name\" && \
-        gh pr create --title \"$branch_name\" --draft --head \"$branch_name\" --base main; \
-    }; f" # Checks out the main branch, Pulls the latest changes from the remote, Checks out a new branch with a user-specified name, Pushes the new branch to the remote. Starts a draft pull request with the title set to the same as the branch name.
+		branch_name=\"$1\"; \
+		git checkout main && \
+		git pull && \
+		git checkout -b \"$branch_name\" && \
+		git push -u origin \"$branch_name\" && \
+		git commit --allow-empty -m 'make pull request' && \
+		git push && \
+		gh pr create --title \"$branch_name\" --draft --head \"$branch_name\" --base main; \
+	}; f" # Checks out the main branch, Pulls the latest changes from the remote, Checks out a new branch with a user-specified name, Pushes the new branch to the remote. Starts a draft pull request with the title set to the same as the branch name.
 EOL
 
 echo "Git configured successfully."
