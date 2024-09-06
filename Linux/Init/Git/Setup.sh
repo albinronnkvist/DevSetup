@@ -8,3 +8,4 @@ bash $SCRIPT_DIR/SubTasks/InstallGit.sh
 bash $SCRIPT_DIR/SubTasks/AliasGForGit.sh
 bash $SCRIPT_DIR/SubTasks/ConfigureGitConfig.sh
 bash $SCRIPT_DIR/SubTasks/ConnectToGitHub.sh
+bash $SCRIPT_DIR/SubTasks/InstallGithubCLI.sh
