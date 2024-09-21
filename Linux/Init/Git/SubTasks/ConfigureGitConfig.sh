@@ -48,6 +48,7 @@ cat <<'EOL' >> ~/.gitconfig
 	us = "reset --soft HEAD^"             	# Undo the last commit but keep the changes in the working directory
 	uh = "reset --hard HEAD^" 							# Reset the working directory to the last commit, discarding all changes
 	cdf = "clean -df"                       # Remove all untracked files and directories, but not ignored files
+	cdfx = "clean -dfx"                     # Remove all untracked files and directories
 	pull = "pull"                           # Fetch from and integrate with another repository or a local branch
 	p = "push"                              # Update remote refs along with associated objects
 	po = "push -u origin"                   # Push changes to the origin remote and set upstream tracking
